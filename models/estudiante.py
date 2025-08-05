@@ -1,6 +1,6 @@
 #app/models/estudiantes.py
 
-from app.config.mysqlconnection import connnectToMySQL
+from app.mysqlconnection import connnectToMySQL
 from flask import flask 
 import re #Para la validacion de email
 
@@ -57,4 +57,14 @@ class Estudiante:
         if not EMAIL_REGEX-match(estudiante['email']):
             flash("Email inválido.", "estudinte_error")
             is_valid = False
-            # Verfificar si el email ya existe (opcional, pare bueno practica) 
+            # Verificar si el email ya existe (opcional, pare bueno practica) 
+                query = "SELECT * FROM estudiantes WHERE email = %(email)s;"
+                data = {'email': estudiante['email']}
+        results = connectToMySQL(DB_NAME).query_db(query, data)
+        if result and result[0] ['id'] != int (estudiante['id']):
+            flash("el email ya esta registrado.","estudiante_error")
+            is_valid = False
+        if not estudiante['curso_id']:
+            flash("Debe seleccionar un curso para el estudiante", "estudiante_error")
+            is_valid = False
+        return is_valid
