@@ -1,4 +1,4 @@
-from app.config.mysqlconnection import connectToMySQL
+from app.mysqlconnection import connectToMySQL
 from flask import Flask
 
 #Nombre de tu base de datos (!asegurate de que coincida con la que creaste!)
@@ -57,5 +57,28 @@ class Curso:
 
                 }
 
+                # Importar Estudiantes aqui para evitar importancia circular
+                from app.models.estudiante import Estudiante
+                curso.estudiantes.append(Estudiante(estudiante_data))
 
-    
+            return curso 
+            
+        @classmethod
+        def update(cls, data)
+            query = "UPDATE cursos SET nombres=%(nombre)s, descripcion=%(descripcion)s, updated_at= NOW() WHERE id=%(id)s;"
+            return connectToMySQL(DB_NAME),query_db(query, data)
+        
+        @classmethod
+        def delete(cls, curso_id):
+            query = "DELETE FROM curso WHERE id=%(id)s;"
+            data = {'id': curso_id}
+            return connectToMySQL(DB_NAME).query_db(query, data)
+        
+        @staticmethod
+        def validate_curso(curso):
+            is_valid = True
+            if len(curso['nombre'])<3:
+                flash("El nombre del curso debe tener al menos 3 caracteres.", "curso_error")
+                is_valid = False
+            return is_valid
+        

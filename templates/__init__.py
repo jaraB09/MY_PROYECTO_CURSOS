@@ -1,4 +1,4 @@
-from app.config.mysqlconnection import connectToMySQL
+from app.mysqlconnection import connectToMySQL
 
 app = Flask(__name__)
 app.secret_key = "matiasponetelaspilas"
